@@ -2,7 +2,6 @@ ARG DEBIAN_REL
 
 FROM debian:${DEBIAN_REL}-slim as builder
 
-ARG ROCKY_REL
 ARG BIND_VER
 
 RUN apt-get update \
