@@ -2,7 +2,7 @@
 
 DEBIAN_REL="bullseye"
 
-while getopts pt OPT ; do
+while getopts lp OPT ; do
   case ${OPT} in
     "l") LATEST="true" ;;
     "p") PUSH="true" ;;
@@ -18,18 +18,20 @@ if [ "$1" == "" ] ; then
   exit 1
 fi
 
+# delete old debian base image
+docker rmi debian:${DEBIAN_REL}-slim
+
 BIND_VER="$1"
 
 if [ "${PUSH}" == "true" ] ; then
-  docker buildx build --push --platform linux/amd64,linux/arm64 -t smbd/dig:${BIND_VER} --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
+  docker buildx build --progress=plain --push --platform linux/amd64,linux/arm64 -t smbd/dig:${BIND_VER} --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
 
   if [ "${LATEST}" == "true" ] ; then
     docker buildx build --push --platform linux/amd64,linux/arm64 -t smbd/dig:latest --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
   fi
-else
-  docker buildx build --load -t smbd/dig:${BIND_VER} --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
+fi
 
-  if [ "${LATEST}" == "true" ] ; then
-    docker buildx build --load -t smbd/dig:latest --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
-  fi
+docker buildx build --progress=plain --load -t smbd/dig:${BIND_VER} --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
+if [ "${LATEST}" == "true" ] ; then
+  docker buildx build --progress=plain --load -t smbd/dig:latest --build-arg DEBIAN_REL=${DEBIAN_REL} --build-arg BIND_VER=${BIND_VER} .
 fi
