@@ -12,6 +12,8 @@ RUN apt-get update \
   libssl-dev \
   libuv1-dev \
   libnghttp2-dev \
+  liburcu-dev \
+  libcap-dev \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -20,7 +22,7 @@ RUN tar xf bind-${BIND_VER}.tar.xz
 
 WORKDIR bind-${BIND_VER}
 RUN ./configure --prefix=/usr/local/bind-${BIND_VER} \
- --disable-geoip --enable-doh --disable-linux-caps --disable-dnstap \
+ --disable-geoip --enable-doh --disable-dnstap \
  && make -j12 && make install
 
 RUN cd /usr/local/bind-${BIND_VER} \
@@ -52,6 +54,8 @@ RUN apt-get update \
   openssl \
   libuv1 \
   libnghttp2-14 \
+  liburcu6 \
+  libcap2 \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
