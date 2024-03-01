@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEBIAN_REL="bullseye"
+DEBIAN_REL="bookworm"
 
 while getopts lp OPT ; do
   case ${OPT} in
