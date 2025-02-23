@@ -4,7 +4,7 @@ ARG DEBIAN_REL=bookworm
 FROM debian:${DEBIAN_REL}-slim
 
 ARG DEBIAN_REL
-ARG BIND_VER=9.20.5
+ARG BIND_VER=9.20.6
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
